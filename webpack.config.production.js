@@ -7,7 +7,6 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        vendor: ['react', 'react-dom', 'react-router'],
         app: [
             'babel-polyfill',
             'whatwg-fetch',
@@ -61,10 +60,6 @@ module.exports = {
                     path: path.join(__dirname, 'dist')
                 }
             }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: Infinity
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
