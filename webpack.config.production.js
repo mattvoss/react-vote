@@ -10,6 +10,7 @@ module.exports = {
         vendor: ['react', 'react-dom', 'react-router'],
         app: [
             'babel-polyfill',
+            'whatwg-fetch',
             './src/index'
         ],
     },
@@ -19,7 +20,7 @@ module.exports = {
         filename: 'assets/[name].[hash].js',
         chunkFilename: 'assets/[name].[chunkhash].js'
     },
-    devtool: 'cheap-module-source-map',
+    devtool: "#source-map",
     module: {
         loaders: [{
             test: /\.js$/,

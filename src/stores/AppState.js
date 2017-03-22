@@ -3,7 +3,7 @@ import axios from 'axios'
 import moment from 'moment'
 import uuid from 'uuid'
 
-const url = 'http://localhost:3001'
+const url = 'http://checkin.regionvivpp.org'
 
 class AppState {
   @observable authenticated
