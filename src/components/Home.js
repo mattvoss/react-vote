@@ -53,7 +53,12 @@ export default class Home extends Component {
 
   handleNavigate = (path) => {
     const { router } = this.context
-    router.push(path)
+    if ('history' in router) {
+      router.history.push(path)
+    } else {
+      router.push(path)
+    }
+    
   }
 
   browse = () => {

@@ -57,7 +57,16 @@ export default class Voter extends Component {
 
   handleNavigate = (path) => {
     const { router } = this.context
-    router.push(path)
+    this.navigate(path)
+  }
+
+  navigate = (path) => {
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.push(path)
+    } else {
+      router.push(path)
+    }
   }
 
   async verifyRegistrant() {

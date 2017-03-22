@@ -88,11 +88,20 @@ export default class Review extends Component {
     const { router } = this.context
     const idx = store.votes.findIndex(r => r.uuid === vote.uuid)
     store.updateField('edit', true)
-    router.push('/office/'+idx.toString())
+    this.navigate('/office/'+idx.toString())
   }
 
   goPrevious = () => {
     this.props.goBack()
+  }
+
+  navigate = (path) => {
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.push(path)
+    } else {
+      router.push(path)
+    }
   }
 
   render() {

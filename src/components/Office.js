@@ -83,7 +83,16 @@ export default class Office extends Component {
       path += (electionIdx + 1).toString()
     }
     
-    router.push(path)
+    this.navigate(path)
+  }
+
+  navigate = (path) => {
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.push(path)
+    } else {
+      router.push(path)
+    }
   }
 
   goPrevious = () => {
