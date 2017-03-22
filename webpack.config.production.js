@@ -20,7 +20,7 @@ module.exports = {
         filename: 'assets/[name].[hash].js',
         chunkFilename: 'assets/[name].[chunkhash].js'
     },
-    devtool: "#source-map",
+    devtool: 'cheap-module-source-map',
     module: {
         loaders: [{
             test: /\.js$/,

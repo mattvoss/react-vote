@@ -4,6 +4,8 @@ import { Provider, observer } from 'mobx-react'
 import LazyRoute from 'lazy-route'
 import DevTools from 'mobx-react-devtools'
 import { Page, Row, Column } from 'hedron'
+import Home from './Home'
+import Site from './Site'
 import Office from './Office'
 import TopBar from './TopBar'
 
@@ -33,12 +35,12 @@ export default class App extends Component {
             <Route 
               exact
               path="/"
-              render={(props) => <LazyRoute {...props} component={import('./Home')} />}
+              component={Home}
             />
             <Route 
               exact
               path="/site"
-              render={(props) => <LazyRoute {...props} component={import('./Site')} />}
+              component={Site}
             />
             <Route 
               exact
