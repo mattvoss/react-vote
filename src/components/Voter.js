@@ -13,15 +13,7 @@ import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Typography from './Typography'
-import { authorize } from './authorize.hoc';
-
-const styles = {
-  badgeImage: {
-    maxWidth: "100%",
-    height: "auto"
-  }
-};
-
+import cs from '../styles/pages/_home.scss'
 
 @inject("store")
 @observer
@@ -121,9 +113,8 @@ export default class Voter extends Component {
                   />
                 </Column>
                 <Column md={12}>
-                  <img 
-                    src="src/images/badge.png" 
-                    style={styles.badgeImage}
+                  <div
+                    className={cs.barcode}
                   />
                 </Column>
               </Row>
