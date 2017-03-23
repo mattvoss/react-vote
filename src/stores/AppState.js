@@ -95,6 +95,16 @@ class AppState {
     return this.site
   }
 
+  @action async selectSite(siteId) {
+    let {data} = await axios.get(`${url}/api/site/${siteId}`)
+    console.log(data)
+    if (data.id > 0) {
+      this.siteId = siteId
+      this.site = data
+    }
+    return this.site
+  }
+
   @action updateField(field, value) {
     this[field] = value;
   }

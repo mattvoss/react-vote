@@ -30,16 +30,9 @@ export default class Site extends Component {
     muiTheme: PropTypes.object.isRequired,
   }
 
-  constructor(props) {
-    super(props)
-    //props.store.updateField(field, event.target.value)
-    //props.store.getSite()
-    this.store = this.props.store
-  }
-
   handleChange = (field, event) => {
-    const store = this.store
-    this.store.updateField(field, event.target.value)
+    const { store } = this.props
+    store.updateField(field, event.target.value)
     store.getSite()
   }
 
@@ -67,7 +60,7 @@ export default class Site extends Component {
   }
 
   render() {
-    const store = this.store
+    const { store } = this.props
     const { muiTheme } = this.context
     return (
       <Row>
@@ -86,7 +79,7 @@ export default class Site extends Component {
                     id="siteId"
                     floatingLabelText="Site ID (6 or 8 digits)"
                     hintText="Enter 6 or 8 digit Site ID Here"
-                    value={this.store.siteId}
+                    value={store.siteId}
                     onChange={((...args) => this.handleChange('siteId', ...args))}
                   />
                   {store.site &&
@@ -120,7 +113,7 @@ export default class Site extends Component {
               />
               <RaisedButton
                 primary
-                disabled={!this.store.siteId}
+                disabled={!store.siteId}
                 label="Next"
                 onTouchTap={((...args) => this.handleNavigate('type', ...args))}
               />

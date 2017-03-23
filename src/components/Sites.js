@@ -56,21 +56,16 @@ export default class Sites extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.store = this.props.store
-  }
-
-  componentWillMount() {
+  componentDidMount() {
       const { store } = this.props
       const { router } = this.context
       store.searchCompanies('A')
   }
 
   handleChange = (field, event) => {
-    const store = this.store
+    const { store } = this.props
     if (!isNaN(event.target.value)) {
-      this.store.updateField(field, event.target.value);
+      store.updateField(field, event.target.value);
       store.searchSiteIds()
     } else {
       store.updateField(field, event.target.value);
@@ -78,11 +73,10 @@ export default class Sites extends Component {
     }
   }
 
-  selectSite = (site) => {
-    const store = this.store
+  async selectSite(site) {
+    const { store } = this.props
     const path = (store.authException) ? 'voter' : 'site'
-    store.updateField('site', site);
-    store.updateField('siteId', site.siteId);
+    await store.selectSite(site.siteId)
     this.handleNavigate(path)
   }
 
@@ -110,7 +104,7 @@ export default class Sites extends Component {
   }
 
   render() {
-    const store = this.store
+    const { store } = this.props
     const { muiTheme } = this.context
     return (
       <Row>
@@ -127,7 +121,7 @@ export default class Sites extends Component {
                     autoFocus
                     id="name"
                     hintText="Enter site to search..."
-                    value={this.store.search}
+                    value={store.search}
                     onChange={((...args) => this.handleChange('search', ...args))}
                   /> <br />
                   <RaisedButton label="Search" secondary />
@@ -137,7 +131,7 @@ export default class Sites extends Component {
               <Row>
                 <Column md={12}>
                   {store.companies.length > 0 &&
-                      <RenderSites sites={store.companies} onSelect={this.selectSite} />
+                      <RenderSites sites={store.companies} onSelect={((...args) => this.selectSite(...args))} />
                   }
                 </Column>
               </Row>

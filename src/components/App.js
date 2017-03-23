@@ -9,10 +9,7 @@ import TopBar from './TopBar'
 
 @observer
 export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.store = this.props.store
-  }
+
   componentDidMount() {
     //this.authenticate()
     
@@ -22,10 +19,10 @@ export default class App extends Component {
     this.props.store.authenticate()
   }
   render() {
-    const { authenticated, authenticating, timeToRefresh, refreshToken } = this.store
+    const { authenticated, authenticating, timeToRefresh, refreshToken } = this.props.store
     return (
       <Router>
-        <Provider store={this.store}>
+        <Provider store={this.props.store}>
           <Page fluid>
             {/*<DevTools />*/}
             <TopBar />
