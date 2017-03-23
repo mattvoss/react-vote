@@ -57,7 +57,6 @@ const defaultProps = {
 const contextTypes = {
   muiTheme: PropTypes.object.isRequired
 };
-console.log(cs);
 
 const Typography = ({
   align,

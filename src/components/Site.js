@@ -45,7 +45,7 @@ export default class Site extends Component {
 
   handleNavigate = (path) => {
     const { router } = this.context
-    this.nvigate(path)
+    this.navigate(path)
   }
 
   navigate = (path) => {
@@ -86,11 +86,11 @@ export default class Site extends Component {
                   />
                   {store.site &&
                     <div>
-                      <Typography type='subheading-2'>Selected Site</Typography>
-                      <div>{store.site.company}</div>
-                      <div>{store.site.street1}</div>
-                      <div>{store.site.street2}</div>
-                      <div>{store.site.city}, {store.site.state}</div>
+                      <Typography type='title'>Selected Site</Typography>
+                      <Typography type='body1'>{store.site.company}</Typography>
+                      <Typography type='body1'>{store.site.street1}</Typography>
+                      <Typography type='body1'>{store.site.street2}</Typography>
+                      <Typography type='body1'>{store.site.city}, {store.site.state}</Typography>
                     </div>
                   }
                 </Column>

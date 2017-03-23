@@ -25,7 +25,7 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             include: path.join(__dirname, 'src'),
-            loader: 'babel',
+            loader: 'babel-loader',
             query: {
                 "presets": [[ "es2015", { modules: false } ], "stage-0", "react"],
                 "plugins": ['transform-async-to-generator', 'transform-decorators-legacy']

@@ -36,7 +36,7 @@ class AppState {
   }
 
   @action async getRegistrant() {
-    let {data} = await axios.get(`${url}/api/registrants/${this.registrantId}`)
+    let {data} = await axios.get(`${url}/api/voter/${this.registrantId}`)
     if (data.length > 0) {
       this.voter = data[0]
     }
@@ -60,7 +60,8 @@ class AppState {
   @action async confirmRegistrant() {
     let pin = false
     const registrant = await this.getRegistrant()
-    if (registrant.length > 0) {
+    if (registrant.id) {
+      this.voter = registrant
       pin = await this.getRegistrantPin()
     }
 
@@ -84,10 +85,10 @@ class AppState {
   }
 
   @action async getSite() {
-    let {data} = await axios.get(`${url}/api/siteid/?search=${this.siteId}`)
+    let {data} = await axios.get(`${url}/api/site/${this.siteId}`)
     console.log(data)
-    if (data.length > 0) {
-      this.site = data[0]
+    if (data.id > 0) {
+      this.site = data
     }
     return this.site
   }

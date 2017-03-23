@@ -16,7 +16,7 @@ import Typography from './Typography'
 import { authorize } from './authorize.hoc';
 const styles = {
   showAll: {
-    leftMargin: '10px'
+    marginLeft: '10px'
   }
 } 
 const RenderSite = (site, onSelect) => (
