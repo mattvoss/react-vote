@@ -65,6 +65,16 @@ export default class App extends Component {
               path="/review"
               render={(props) => <LazyRoute {...props} component={import('./Review')} />}
             />
+            <Route 
+              exact
+              path="/finish"
+              render={(props) => <LazyRoute {...props} component={import('./Finish')} />}
+            />
+            <Route 
+              exact
+              path="/faq"
+              render={(props) => <LazyRoute {...props} component={import('./Faq')} />}
+            />
           </Page>
         </Provider>
       </Router>

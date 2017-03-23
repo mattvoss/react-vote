@@ -52,7 +52,12 @@ export default class Voter extends Component {
   }
 
   goPrevious = () => {
-    this.props.goBack()
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.goBack()
+    } else {
+      router.goBack()
+    }
   }
 
   handleNavigate = (path) => {

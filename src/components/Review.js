@@ -70,17 +70,8 @@ export default class Review extends Component {
   };
 
   handleNext = () => {
-    let path = 'office/'
-    const { store, match } = this.props
-    const { router } = this.context
-    const electionIdx = parseInt(match.params.id, 10)
-    if (electionIdx === (store.offices.length-1) || store.edit) {
-      path = "review"
-    } else {
-      path += (electionIdx + 1).toString()
-    }
-    
-    router.push(path)
+    let path = '/finish'
+    this.navigate(path)
   }
 
   selectVote = (vote) => {
@@ -92,7 +83,12 @@ export default class Review extends Component {
   }
 
   goPrevious = () => {
-    this.props.goBack()
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.goBack()
+    } else {
+      router.goBack()
+    }
   }
 
   navigate = (path) => {

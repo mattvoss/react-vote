@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { inject, observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 
@@ -10,10 +10,6 @@ import FlatButton from 'material-ui/FlatButton'
 import { Page, Row, Column } from 'hedron'
 import Button from './ui/Button'
 
-function handleTouchTap() {
-  alert('onTouchTap triggered on the title component');
-}
-
 const styles = {
   title: {
     cursor: 'pointer',
@@ -23,26 +19,44 @@ const styles = {
 @inject("store") @observer
 export default class TopBar extends Component {
 
-  constructor(props) {
-    super(props);
-    this.store = this.props.store
+  static propTypes = {
+    store: React.PropTypes.object,
   }
 
-  authenticate(e) {
-    if (e) e.preventDefault();
-    console.log('CLICKED BUTTON')
-    this.store.authenticate()
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired,
+  }
+
+  handleTitleTap = () => {
+    this.navigate('/')
+  }
+
+  handleHelpTap = () => {
+    this.navigate('/faq')
+  }
+
+  navigate = (path) => {
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.push(path)
+    } else {
+      router.push(path)
+    }
   }
 
   render() {
-    const { authenticated } = this.store
     return (
       <Row>
         <AppBar
           showMenuIconButton={false}
           title={<span style={styles.title}>Voting</span>}
-          onTitleTouchTap={handleTouchTap}
-          iconElementRight={<IconButton><ActionHelp /></IconButton>}
+          onTitleTouchTap={this.handleTitleTap}
+          iconElementRight={
+            <IconButton onTouchTap={this.handleHelpTap}>
+              <ActionHelp />
+            </IconButton>
+          }
         />
       </Row>
     )

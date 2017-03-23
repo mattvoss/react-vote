@@ -58,7 +58,12 @@ export default class Site extends Component {
   }
 
   goPrevious = () => {
-    this.props.goBack()
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.goBack()
+    } else {
+      router.goBack()
+    }
   }
 
   render() {

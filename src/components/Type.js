@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
+import { observable } from 'mobx'
 import { inject, observer } from 'mobx-react'
+import moment from 'moment'
 import { Page, Row, Column } from 'hedron'
 import {
   Card,
@@ -11,9 +13,9 @@ import {
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import Typography from './Typography'
-import { authorize } from './authorize.hoc';
+import { authorize } from './authorize.hoc'
 
 const styles = {
   block: {
@@ -26,6 +28,9 @@ const styles = {
 
 @inject("store") @authorize @observer
 export default class Type extends Component {
+  @observable management = null
+  @observable nonmanagement = null
+
   static fetchData({ store }) {
 
   }
@@ -39,18 +44,16 @@ export default class Type extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.store = this.props.store
-  }
+  componentDidMount() {
+    const { store } = this.props
+    const { router } = this.context
 
-  componentWillMount() {
-      const { store } = this.props
-      const { router } = this.context
+    this.management = store.checkIfTypeVoted('management')
+    this.nonmanagement = store.checkIfTypeVoted('non-management')
   }
 
   handleChange = (field, event, value) => {
-    const store = this.store
+    const { store } = this.props
     store.updateField(field, event.target.value);
   }
 
@@ -69,11 +72,16 @@ export default class Type extends Component {
   }
 
   goPrevious = () => {
-    this.props.goBack()
+    const { router } = this.context
+    if ('history' in router) {
+      router.history.goBack()
+    } else {
+      router.goBack()
+    }
   }
 
   render() {
-    const store = this.store
+    const { store } = this.props
     const { muiTheme } = this.context
     return (
       <Row>
@@ -91,8 +99,14 @@ export default class Type extends Component {
                     defaultSelected={store.type}
                     onChange={((...args) => this.handleChange('type', ...args))}>
                     <RadioButton
+                      disabled={(typeof this.management === 'object')}
                       value="management"
-                      label={
+                      label={(this.management) ?
+                        <div>
+                          <div>Management</div>
+                          <Typography type={"body1"}>{this.management.lastname}, {this.management.firstname} has already voted</Typography>
+                          <Typography type={"body1"}>{(this.management) ? moment(this.management.dateCast).format('ddd MMM Do h:mm a') : null}</Typography>
+                        </div> :
                         <div>
                           <div>Management</div>
                           <Typography type={"body1"}>This vote represents management for your site</Typography>
@@ -101,8 +115,14 @@ export default class Type extends Component {
                       style={styles.radioButton}
                     />
                     <RadioButton
+                      disabled={(typeof this.nonmanagement === 'object')}
                       value="non-management"
-                      label={
+                      label={(this.nonmanagement) ?
+                        <div>
+                          <div>Non-Management</div>
+                          <Typography type={"body1"}>{this.nonmanagement.lastname}, {this.nonmanagement.firstname} has already voted</Typography>
+                          <Typography type={"body1"}>{(this.nonmanagement) ? moment(this.nonmanagement.dateCast).format('ddd MMM Do h:mm a') : null}</Typography>
+                        </div> :
                         <div>
                           <div>Non-Management</div>
                           <Typography type={"body1"}>This vote represents non-management for your site</Typography>

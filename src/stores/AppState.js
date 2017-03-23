@@ -147,6 +147,27 @@ class AppState {
     
     return vote
   }
+
+  checkIfTypeVoted(type) {
+    const voter = this.site.voters.find(vote => vote.voterType == type)
+    return voter
+  }
+
+  @action reset() {
+    this.voter = null
+    this.companies = []
+    this.offices = []
+    this.votes = []
+    this.registrantId = ""
+    this.pin = ""
+    this.pinConfirmed = false
+    this.siteId = ""
+    this.site = null
+    this.search = ""
+    this.type = null
+    this.edit = false
+    return
+  }
   
 }
 
