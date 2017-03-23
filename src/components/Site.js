@@ -102,9 +102,9 @@ export default class Site extends Component {
               </Row>
               <Row>
                 <Column md={12}>
-                  <div>
+                  <Typography type='subheading'>
                     If you are unsure of your Site ID you can browse and select from all eligible "full member sites".
-                  </div>
+                  </Typography>
                   <RaisedButton
                     label="Browse Eligible Sites"
                     secondary

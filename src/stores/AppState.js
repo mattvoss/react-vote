@@ -49,9 +49,11 @@ class AppState {
     if (data.length > 0) {
       this.pinConfirmed = true
       this.authException = false
-      this.siteId = (this.voter.siteId) ? this.voter.siteId : ""
-      if (this.siteId) {
-        const site = await this.getSite()
+      if (!this.siteId) {
+        this.siteId = (this.voter.siteId) ? this.voter.siteId : ""
+        if (this.siteId) {
+          const site = await this.getSite()
+        }
       }
     }
     return this.pinConfirmed

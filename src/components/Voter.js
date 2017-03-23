@@ -33,14 +33,19 @@ export default class Voter extends Component {
     muiTheme: PropTypes.object.isRequired,
   }
 
-  constructor(props) {
-    super(props);
-    this.store = this.props.store
+  checkIfComplete = () => {
+    let retVal = false
+    const { store } = this.props
+    if (store.registrantId.length > 0 && store.pin.length > 0) {
+      retVal = true
+    }
+
+    return retVal
   }
 
   handleChange = (field, event) => {
-    const store = this.store
-    this.store.updateField(field, event.target.value)
+    const { store } = this.props
+    store.updateField(field, event.target.value)
   }
 
   goPrevious = () => {
@@ -68,7 +73,7 @@ export default class Voter extends Component {
 
   async verifyRegistrant() {
     const errorText = 'Your Registrant ID and/or Pin is incorrect'
-    const store = this.store
+    const { store } = this.props
     const confirmed = await store.confirmRegistrant()
     if (confirmed) {
       this.errorRegistrantId = null
@@ -81,14 +86,14 @@ export default class Voter extends Component {
   }
 
   render() {
-    const store = this.store
+    const { store } = this.props
     return (
       <Row>
         <Column md={12}>
           <Card>
             <CardHeader
               title="Voter Identification"
-              subtitle="Enter your Registrant ID to vote"
+              subtitle="Enter your Registrant ID and Pin to vote"
             />
             <CardMedia>
               <Row>
@@ -97,8 +102,9 @@ export default class Voter extends Component {
                     autoFocus
                     fullWidth
                     id="registrantId"
+                    floatingLabelText="Registrant ID"
                     hintText="Enter Registrant ID Here"
-                    value={this.store.registrantId}
+                    value={store.registrantId}
                     onChange={((...args) => this.handleChange('registrantId', ...args))}
                     errorText={this.errorRegistrantId}
                   />
@@ -106,8 +112,9 @@ export default class Voter extends Component {
                   <TextField
                     fullWidth
                     id="pin"
+                    floatingLabelText="Pin"
                     hintText="Enter PIN"
-                    value={this.store.pin}
+                    value={store.pin}
                     onChange={((...args) => this.handleChange('pin', ...args))}
                     errorText={this.errorPin}
                   />
@@ -126,6 +133,7 @@ export default class Voter extends Component {
               />
               <RaisedButton
                 primary
+                disabled={!this.checkIfComplete()}
                 label="Next"
                 onTouchTap={((...args) => this.verifyRegistrant(...args))}
               />
