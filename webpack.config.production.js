@@ -30,9 +30,14 @@ module.exports = {
                 "presets": [[ "es2015", { modules: false } ], "stage-0", "react"],
                 "plugins": ['transform-async-to-generator', 'transform-decorators-legacy']
             }
-        }, {
-            test: /\.scss$/i,
-            loader: ExtractTextPlugin.extract(['css-loader', 'postcss-loader', 'resolve-url-loader', 'sass-loader?sourceMap']),
+        },  {
+                test: /\.scss$/,
+                loaders: [
+                    'style-loader',
+                    'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+                    'resolve-url-loader',
+                    'sass-loader'
+                ]
         }, {
             test: /\.(jpe?g|png|gif|svg)$/i,
             loaders: [
@@ -71,7 +76,17 @@ module.exports = {
                 warnings: false
             }
         }),
-        new ExtractTextPlugin("assets/styles.css"),
+        new webpack.LoaderOptionsPlugin({
+            test: /\.scss$/,
+            debug: true,
+            options: {
+                postcss: function() {
+                    return [ precss, autoprefixer ];
+                },
+                context: path.join(__dirname, "src"),
+                output: { path: path.join(__dirname, "dist") }
+            }
+        }),
         new HtmlWebpackPlugin({
             hash: false,
             template: './index.hbs'
