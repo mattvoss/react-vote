@@ -133,16 +133,28 @@ export default class Office extends Component {
               </Row>
             </CardMedia>
             <CardActions>
-              <RaisedButton
-                label="Previous" 
-                onTouchTap={((...args) => this.goPrevious(...args))}
-              />
-              <RaisedButton
-                primary
-                disabled={!vote}
-                label="Next"
-                onTouchTap={((...args) => this.handleNext(...args))}
-              />
+              {store.edit &&
+                <RaisedButton
+                  primary
+                  disabled={!vote}
+                  label="Update Vote"
+                  onTouchTap={((...args) => this.navigate('/review', ...args))}
+                />
+              }
+              {!store.edit &&
+                <div>
+                  <RaisedButton
+                    label="Previous" 
+                    onTouchTap={((...args) => this.goPrevious(...args))}
+                  />
+                  <RaisedButton
+                    primary
+                    disabled={!vote}
+                    label="Next"
+                    onTouchTap={((...args) => this.handleNext(...args))}
+                  />
+                </div>
+              }
             </CardActions>
           </Card>
         </Column>

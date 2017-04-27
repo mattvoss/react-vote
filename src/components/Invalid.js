@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Page, Row, Column } from 'hedron'
+import { Flex, Box } from 'reflexbox'
 import {
   Card,
   CardActions,
@@ -12,19 +12,19 @@ import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import {List, ListItem} from 'material-ui/List'
-import ActionDone from 'material-ui/svg-icons/action/done'
-import ReactCountdownClock from 'react-countdown-clock'
 import Typography from './Typography'
 
-@inject("store") @observer
-export default class Finish extends Component {
-  static fetchData({ store }) {
-
+const styles = {
+  showAll: {
+    marginLeft: '10px'
   }
+} 
+
+@inject("store") @observer
+export default class Invalid extends Component {
 
   static propTypes = {
     store: React.PropTypes.object,
-    match: React.PropTypes.object,
   };
 
   static contextTypes = {
@@ -35,6 +35,8 @@ export default class Finish extends Component {
   componentWillMount() {
     const { store } = this.props
     store.setExcludePage(true)
+
+    setTimeout(() => this.navigate('/'), 25000)
   }
 
   componentWillUnmount() {
@@ -42,19 +44,13 @@ export default class Finish extends Component {
     store.setExcludePage(false)
   }
 
-  goBegin = () => {
+  handleNavigate = (path) => {
     const { store } = this.props
-
-    store.reset()
-    this.navigate('/')
-  }
-
-  goPrevious = () => {
     const { router } = this.context
-    if ('history' in router) {
-      router.history.goBack()
+    if (store.isActive()) {
+      this.navigate(path)
     } else {
-      router.goBack()
+      this.navigate('/invalid')
     }
   }
 
@@ -70,31 +66,29 @@ export default class Finish extends Component {
   render() {
     const { store } = this.props
     const { muiTheme } = this.context
-
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardHeader
-              title="Vote Cast"
-              subtitle="Thank you for voting"
-            />
-            <CardMedia>
-              <Row alignItems="center">
-                <Column md={12} style={{height: '350px'}}>
-                  <ReactCountdownClock 
-                    seconds={25}
-                    color="#000"
-                    alpha={0.9}
-                    size={300}
-                    onComplete={this.goBegin} 
-                  />
-                </Column>
-              </Row>
-            </CardMedia>
-          </Card>
-        </Column>
-      </Row>
+      <Box col={12} p={1}>
+        <Card>
+          <CardHeader
+            title={"Voting is not available"}
+          />
+          <CardMedia>
+            <Box col={12} p={1}>
+              <Typography type={"headline"}>
+                {store.alreadyVoted &&
+                  <div>You have already voted</div>
+                }
+                {!store.isAfterStart() && !store.alreadyVoted &&
+                  <div>Voting has not started yet</div>
+                }
+                {!store.isBeforeEnd() && !store.alreadyVoted &&
+                  <div>Voting has ended</div>
+                }
+              </Typography>
+              </Box>
+          </CardMedia>
+        </Card>
+      </Box>
     )
   }
 

@@ -6,8 +6,9 @@ import AppBar from 'material-ui/AppBar'
 import IconButton from 'material-ui/IconButton'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import ActionHelp from 'material-ui/svg-icons/action/help'
+import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import FlatButton from 'material-ui/FlatButton'
-import { Page, Row, Column } from 'hedron'
+import { Box } from 'reflexbox'
 import Button from './ui/Button'
 
 const styles = {
@@ -33,7 +34,25 @@ export default class TopBar extends Component {
   }
 
   handleHelpTap = () => {
-    this.navigate('/faq')
+    const { store } = this.props
+    if (store.inFaq) {
+      this.goPrevious()
+    } else {
+      const location = window.location.pathname.replace('/', '')
+      store.setCurrentPath(location)
+      this.navigate('/faq')
+    }
+  }
+
+  goPrevious = () => {
+    const { router } = this.context
+    const { store } = this.props
+    store.inFaq = false
+    if ('history' in router) {
+      router.history.goBack()
+    } else {
+      router.goBack()
+    }
   }
 
   navigate = (path) => {
@@ -46,19 +65,21 @@ export default class TopBar extends Component {
   }
 
   render() {
+    const { store } = this.props
     return (
-      <Row>
+      <Box col={12}>
         <AppBar
           showMenuIconButton={false}
           title={<span style={styles.title}>Voting</span>}
           onTitleTouchTap={this.handleTitleTap}
           iconElementRight={
             <IconButton onTouchTap={this.handleHelpTap}>
-              <ActionHelp />
+              {store.inFaq && <NavigationCancel />}
+              {!store.inFaq && <ActionHelp />}
             </IconButton>
           }
         />
-      </Row>
+      </Box>
     )
   }
 

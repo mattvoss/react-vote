@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { observable } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
-import { Page, Row, Column } from 'hedron'
+import { Flex, Box } from 'reflexbox'
 import {
   Card,
   CardActions,
@@ -44,7 +44,7 @@ export default class Type extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const { store } = this.props
     const { router } = this.context
 
@@ -80,75 +80,112 @@ export default class Type extends Component {
     }
   }
 
+  bothVoted = () => {
+    let retVal = false
+    if (this.nonmanagement && this.management) {
+      retVal = true
+    }
+
+    return retVal
+  }
+
+  managementLabel = () => {
+    let retVal
+    if (this.management) {
+      retVal = (
+        <div>
+          <div>Management</div>
+          <Typography type={"body1"}>{this.management.lastname}, {this.management.firstname} has already voted</Typography>
+          <Typography type={"body1"}>{(this.management) ? moment(this.management.dateCast).format('ddd MMM Do h:mm a') : null}</Typography>
+        </div>
+      )
+    } else {
+      retVal = (
+        <div>
+          <div>Management</div>
+          <Typography type={"body1"}>This vote represents management for your site</Typography>
+        </div>
+      )
+    }
+    return retVal         
+  }
+
+  nonManagementLabel = () => {
+    let retVal
+    if (this.nonmanagement) {
+      retVal = (
+        <div>
+          <div>Non-Management</div>
+          <Typography type={"body1"}>{this.nonmanagement.lastname}, {this.nonmanagement.firstname} has already voted</Typography>
+          <Typography type={"body1"}>{(this.nonmanagement) ? moment(this.nonmanagement.dateCast).format('ddd MMM Do h:mm a') : null}</Typography>
+        </div>   
+      )
+    } else {
+      retVal = (
+        <div>
+          <div>Non-Management</div>
+          <Typography type={"body1"}>This vote represents non-management for your site</Typography>
+        </div>
+      )
+    }
+    return retVal         
+  }
+
   render() {
     const { store } = this.props
     const { muiTheme } = this.context
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardHeader
-              title="Voter Type"
-              subtitle="Select your voter type"
+      <Box col={12} p={1}>
+        <Card>
+          <CardHeader
+            title="Voter Type"
+            subtitle="Select your voter type"
+          />
+          <CardMedia>
+            
+            <Box col={12} p={1}>
+              <RadioButtonGroup
+                name="voterType"
+                defaultSelected={store.type}
+                onChange={((...args) => this.handleChange('type', ...args))}>
+                <RadioButton
+                  disabled={(typeof this.management === 'object')}
+                  value="management"
+                  label={this.managementLabel()}
+                  style={styles.radioButton}
+                />
+                <RadioButton
+                  disabled={(typeof this.nonmanagement === 'object')}
+                  value="non-management"
+                  label={this.nonManagementLabel()}
+                  style={styles.radioButton}
+                />
+              </RadioButtonGroup>
+            </Box>
+          </CardMedia>
+          <CardActions>
+            <RaisedButton
+              label="Previous" 
+              onTouchTap={((...args) => this.goPrevious(...args))}
             />
-            <CardMedia>
-              <Row>
-                <Column md={12}>
-                  <RadioButtonGroup
-                    name="voterType"
-                    defaultSelected={store.type}
-                    onChange={((...args) => this.handleChange('type', ...args))}>
-                    <RadioButton
-                      disabled={(typeof this.management === 'object')}
-                      value="management"
-                      label={(this.management) ?
-                        <div>
-                          <div>Management</div>
-                          <Typography type={"body1"}>{this.management.lastname}, {this.management.firstname} has already voted</Typography>
-                          <Typography type={"body1"}>{(this.management) ? moment(this.management.dateCast).format('ddd MMM Do h:mm a') : null}</Typography>
-                        </div> :
-                        <div>
-                          <div>Management</div>
-                          <Typography type={"body1"}>This vote represents management for your site</Typography>
-                        </div>
-                      }
-                      style={styles.radioButton}
-                    />
-                    <RadioButton
-                      disabled={(typeof this.nonmanagement === 'object')}
-                      value="non-management"
-                      label={(this.nonmanagement) ?
-                        <div>
-                          <div>Non-Management</div>
-                          <Typography type={"body1"}>{this.nonmanagement.lastname}, {this.nonmanagement.firstname} has already voted</Typography>
-                          <Typography type={"body1"}>{(this.nonmanagement) ? moment(this.nonmanagement.dateCast).format('ddd MMM Do h:mm a') : null}</Typography>
-                        </div> :
-                        <div>
-                          <div>Non-Management</div>
-                          <Typography type={"body1"}>This vote represents non-management for your site</Typography>
-                        </div>
-                      }
-                      style={styles.radioButton}
-                    />
-                  </RadioButtonGroup>
-                </Column>
-              </Row>
-            </CardMedia>
-            <CardActions>
+            {this.bothVoted() &&
               <RaisedButton
-                label="Previous" 
-                onTouchTap={((...args) => this.goPrevious(...args))}
+                primary
+                label="Finish"
+                onTouchTap={((...args) => this.handleNavigate('/reset', ...args))}
               />
+            }
+            {!this.bothVoted() &&
               <RaisedButton
                 disabled={!store.type}
                 primary
                 label="Next"
                 onTouchTap={((...args) => this.handleNavigate('office/0', ...args))}
               />
-            </CardActions>
-          </Card>
-        </Column>
-      </Row>
+            }
+          </CardActions>
+        </Card>
+      </Box>
     )
   }
 

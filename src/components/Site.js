@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { observable } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { Page, Row, Column } from 'hedron'
 import {
@@ -16,6 +17,7 @@ import { authorize } from './authorize.hoc'
 
 @inject("store") @authorize @observer
 export default class Site extends Component {
+  @observable error = null
 
   static fetchData({ store }) {
     return store.getSite()
@@ -30,10 +32,26 @@ export default class Site extends Component {
     muiTheme: PropTypes.object.isRequired,
   }
 
-  handleChange = (field, event) => {
+  componentWillMount() {
+    const { store } = this.props
+    if (!store.site) {
+      this.setError()
+    }
+  }
+
+  setError = () => {
+    this.error = 'This number is not tied to an eligible voting site. Please enter an eligible number to continue.'
+  }
+
+  async handleChange(field, event) {
     const { store } = this.props
     store.updateField(field, event.target.value)
-    store.getSite()
+    const site =  await store.getSite()
+    if (!site) {
+      this.setError()
+    } else {
+      this.error = null
+    }
   }
 
   handleNavigate = (path) => {
@@ -66,10 +84,6 @@ export default class Site extends Component {
       <Row>
         <Column md={12}>
           <Card>
-            <CardHeader
-              title="Select Site"
-              subtitle="Select your site in order to cast your vote"
-            />
             <CardMedia>
               <Row>
                 <Column md={12}>
@@ -77,10 +91,12 @@ export default class Site extends Component {
                     autoFocus
                     fullWidth
                     id="siteId"
-                    floatingLabelText="Site ID (6 or 8 digits)"
-                    hintText="Enter 6 or 8 digit Site ID Here"
+                    floatingLabelText="Member Number (6 or 8 digits)"
+                    hintText="Enter Membership Number"
+                    type="tel"
                     value={store.siteId}
                     onChange={((...args) => this.handleChange('siteId', ...args))}
+                    errorText={this.error}
                   />
                   {store.site &&
                     <div>
@@ -93,18 +109,6 @@ export default class Site extends Component {
                   }
                 </Column>
               </Row>
-              <Row>
-                <Column md={12}>
-                  <Typography type='subheading'>
-                    If you are unsure of your Site ID you can browse and select from all eligible "full member sites".
-                  </Typography>
-                  <RaisedButton
-                    label="Browse Eligible Sites"
-                    secondary
-                    onTouchTap={((...args) => this.handleNavigate('sites', ...args))}
-                  />
-                </Column>
-              </Row>
             </CardMedia>
             <CardActions>
               <RaisedButton
@@ -113,7 +117,7 @@ export default class Site extends Component {
               />
               <RaisedButton
                 primary
-                disabled={!store.siteId}
+                disabled={!store.site}
                 label="Next"
                 onTouchTap={((...args) => this.handleNavigate('type', ...args))}
               />

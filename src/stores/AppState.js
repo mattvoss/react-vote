@@ -2,17 +2,18 @@ import { observable, action } from 'mobx'
 import axios from 'axios'
 import moment from 'moment'
 import uuid from 'uuid'
+import settings from '../../config'
 
-const url = 'https://checkin.regionvivpp.org'
+const url = settings.checkinServerUrl
 
 class AppState {
-  @observable authenticated
   @observable authException = false
-  @observable authenticating
   @observable voter = null
   @observable companies = []
   @observable offices = []
   @observable votes = []
+  @observable voteResults = null
+  @observable alreadyVoted = false
   @observable registrantId = ""
   @observable pin = ""
   @observable pinConfirmed = false
@@ -21,10 +22,12 @@ class AppState {
   @observable search = ""
   @observable type = null
   @observable edit = false
+  @observable timeout = 60000
+  @observable excludePage = false
+  @observable currentPath = "General"
+  @observable inFaq = false
 
   constructor() {
-    this.authenticated = false
-    this.authenticating = false
     this.fetchOffices()
   }
 
@@ -36,27 +39,43 @@ class AppState {
   }
 
   @action async getRegistrant() {
-    let {data} = await axios.get(`${url}/api/voter/${this.registrantId}`)
-    if (data.length > 0) {
-      this.voter = data[0]
-    }
-    return data
+    let retVal
+    try {
+      let { data } = await axios.get(`${url}/api/voter/${this.registrantId}`)
+      if (data) {
+        this.voter = data
+      }
+      retVal = data
+    } catch(e) {
+      console.log(e)
+      this.alreadyVoted = true
+      retVal = e
+    } 
+    return retVal
   }
 
   @action async getRegistrantPin() {
-    let {data} = await axios.get(`${url}/api/registrants?category=confirmation&search=${this.pin}`)
-    
-    if (data.length > 0) {
-      this.pinConfirmed = true
-      this.authException = false
-      if (!this.siteId) {
-        this.siteId = (this.voter.siteId) ? this.voter.siteId : ""
-        if (this.siteId) {
-          const site = await this.getSite()
+    let retVal
+    try {
+      let {data} = await axios.get(`${url}/api/voter/${this.registrantId}/pin/${this.pin}`)
+      
+      if ("id" in data) {
+        this.pinConfirmed = true
+        this.authException = false
+        if (!this.siteId) {
+          this.siteId = (this.voter.siteId) ? this.voter.siteId : ""
+          if (this.siteId) {
+            const site = await this.getSite()
+          }
         }
       }
-    }
-    return this.pinConfirmed
+      retVal = true
+    } catch(e) {
+      console.log(e)
+      this.authException = true
+      retVal = null
+    } 
+    return retVal
   }
 
   @action async confirmRegistrant() {
@@ -70,9 +89,17 @@ class AppState {
     return pin
   }
 
+  @action async getAllSites() {
+    this.search = ""
+    let {data} = await axios.get(`${url}/api/votingSites`)
+    console.log(data)
+    this.companies = data
+    return data
+  }
+
   @action async searchCompanies(search) {
     const query = (search) ? search : this.search
-    let {data} = await axios.get(`${url}/api/company/?search=${query}`)
+    let {data} = await axios.get(`${url}/api/votingSite/${query}`)
     console.log(data)
     this.companies = data
     return data
@@ -89,8 +116,10 @@ class AppState {
   @action async getSite() {
     let {data} = await axios.get(`${url}/api/site/${this.siteId}`)
     console.log(data)
-    if (data.id > 0) {
+    if (data && data.id > 0) {
       this.site = data
+    } else {
+      this.site = null
     }
     return this.site
   }
@@ -98,9 +127,11 @@ class AppState {
   @action async selectSite(siteId) {
     let {data} = await axios.get(`${url}/api/site/${siteId}`)
     console.log(data)
-    if (data.id > 0) {
+    if (data && data.id > 0) {
       this.siteId = siteId
       this.site = data
+    } else {
+      this.site = null
     }
     return this.site
   }
@@ -132,11 +163,13 @@ class AppState {
   @action updateVote(office, candidate) {
     let vote = {}
     const idx = this.votes.findIndex(vote => vote.electionid == office.id)
+    const prefix = this.voter.badge_prefix
+    const regId = `${prefix}${this.voter.id.toString().padStart(5, '0')}`
     if (idx > -1) {
       vote = this.votes[idx]
       const newVote = {
         siteid: this.siteId,
-        registrantid: this.voter.id,
+        registrantid: regId,
         electionid: office.id,
         candidateid: candidate.id,
         votertype: this.type,
@@ -147,17 +180,31 @@ class AppState {
       vote = {
         uuid: uuid.v1(),
         siteid: this.siteId,
-        registrantid: this.voter.id,
+        registrantid: regId,
         electionid: office.id,
         candidateid: candidate.id,
         votertype: this.type,
-        datecast: moment().format('YYYY-MM-DD H:i:s'),
+        datecast: moment().format('YYYY-MM-DD H:mm:ss'),
       }
       this.votes.push(vote)
     }
     console.log(vote)
     
     return vote
+  }
+
+  @action async castVote() {
+    let {data} = await axios.post(
+      `${url}/api/castVote`,
+      {
+        votes: this.votes
+      }
+    )
+    console.log(data)
+    if (data) {
+      this.voteResults = data
+    }
+    return this.voteResults
   }
 
   checkIfTypeVoted(type) {
@@ -178,9 +225,36 @@ class AppState {
     this.search = ""
     this.type = null
     this.edit = false
+    this.alreadyVoted = false
+    this.voteResults = null
+    this.startPage = false
     return
   }
+
+  isAfterStart() {
+    return moment().isAfter(settings.start)
+  }
+
+  isBeforeEnd() {
+    return moment().isBefore(settings.end)
+  }
   
+  isActive() {
+    return this.isAfterStart() && this.isBeforeEnd()
+  }
+
+  @action setExcludePage(value) {
+    this.excludePage = value
+    return this.excludePage
+  }
+
+  @action setCurrentPath(path) {
+    if (path === "") {
+      this.currentPath = "General"
+    } else {
+      this.currentPath = path.replace(/\b\w/g, l => l.toUpperCase())
+    }
+  }
 }
 
 export default AppState;

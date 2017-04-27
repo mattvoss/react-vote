@@ -11,6 +11,7 @@ import {
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
+import ActionCached from 'material-ui/svg-icons/action/cached'
 import {List, ListItem} from 'material-ui/List'
 import Typography from './Typography'
 import { authorize } from './authorize.hoc';
@@ -21,10 +22,10 @@ const styles = {
 } 
 const RenderSite = (site, onSelect) => (
   <ListItem
+    disabled
     key={site.id}
     primaryText={site.company}
     secondaryTextLines={2}
-    onTouchTap={((...args) => onSelect(site, ...args))}
     secondaryText={
       <div>
         <div>{site.street1}{(site.street2) ? `, ${site.street2}`: null}</div>
@@ -40,7 +41,7 @@ const RenderSites = ({sites, onSelect}) => (
   </List>
 )
 
-@inject("store") @authorize @observer
+@inject("store") @observer
 export default class Sites extends Component {
 
   static fetchData({ store }) {
@@ -59,7 +60,7 @@ export default class Sites extends Component {
   componentDidMount() {
       const { store } = this.props
       const { router } = this.context
-      store.searchCompanies('A')
+      this.showAll()
   }
 
   handleChange = (field, event) => {
@@ -78,6 +79,11 @@ export default class Sites extends Component {
     const path = (store.authException) ? 'voter' : 'site'
     await store.selectSite(site.siteId)
     this.handleNavigate(path)
+  }
+
+  async showAll(event) {
+    const { store } = this.props
+    await store.getAllSites()
   }
 
   handleNavigate = (path) => {
@@ -111,7 +117,7 @@ export default class Sites extends Component {
         <Column md={12}>
           <Card>
             <CardHeader
-              title="Sites"
+              title="Browse Eligible Sites"
               subtitle="Only Region 6 Full Member Sites are eligible"
             />
             <CardMedia>
@@ -124,8 +130,19 @@ export default class Sites extends Component {
                     value={store.search}
                     onChange={((...args) => this.handleChange('search', ...args))}
                   /> <br />
-                  <RaisedButton label="Search" secondary />
-                  <RaisedButton label="Show All" style={styles.showAll}/>
+                  <RaisedButton
+                    icon={<ActionCached />}
+                    label="Show All"
+                    onTouchTap={((...args) => this.showAll(...args))}
+                  />
+                  {store.isActive() &&
+                  <RaisedButton
+                    label="Start Vote"
+                    style={styles.showAll} 
+                    primary
+                    onTouchTap={((...args) => this.handleNavigate('/login', ...args))}
+                  />
+                  }
                 </Column>
               </Row>
               <Row>
@@ -136,6 +153,15 @@ export default class Sites extends Component {
                 </Column>
               </Row>
             </CardMedia>
+            {store.isActive() &&
+              <CardActions>
+                <RaisedButton
+                  primary
+                  label="Start Vote"
+                  onTouchTap={((...args) => this.handleNavigate('/login', ...args))}
+                />
+              </CardActions>
+            }
           </Card>
         </Column>
       </Row>

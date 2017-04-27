@@ -6,14 +6,15 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import App from './components/App'
 import AppState from './stores/AppState'
-import styles from './styles/main.scss';
+import Theme from './components/Theme'
+import styles from './styles/main.scss'
 
 injectTapEventPlugin();
 const appState = new AppState();
 
 ReactDOM.render(
   <AppContainer>
-    <MuiThemeProvider>
+    <MuiThemeProvider muiTheme={Theme()}>
       <App store={appState} />
     </MuiThemeProvider>
   </AppContainer>,
@@ -31,4 +32,22 @@ if (module.hot) {
       document.getElementById('root')
     );
   });
+}
+
+// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+if (!String.prototype.padStart) {
+  String.prototype.padStart = function padStart(targetLength,padString) {
+    targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+    padString = String(padString || ' ');
+    if (this.length > targetLength) {
+      return String(this);
+    } else {
+      targetLength = targetLength-this.length;
+      if (targetLength > padString.length) {
+        padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+      }
+      return padString.slice(0,targetLength) + String(this);
+    }
+  };
 }

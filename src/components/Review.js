@@ -69,7 +69,9 @@ export default class Review extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  handleNext = () => {
+  async handleNext() {
+    const { store } = this.props
+    const results = await store.castVote()
     let path = '/finish'
     this.navigate(path)
   }
@@ -79,7 +81,7 @@ export default class Review extends Component {
     const { router } = this.context
     const idx = store.votes.findIndex(r => r.uuid === vote.uuid)
     store.updateField('edit', true)
-    this.navigate('/office/'+idx.toString())
+    setTimeout(() => this.navigate('/office/'+idx.toString()), 500)
   }
 
   goPrevious = () => {
