@@ -94,39 +94,36 @@ export default class Login extends Component {
   render() {
     const { store } = this.props
     return (
-      <Flex wrap>
+      <Flex wrap className={cs.mainContainer}>
         <Box col={12} lg={6} md={12} sm={12} p={1}>
           <Card>
-            <CardMedia>
-              <Box col={12} p={1}>
-                <TextField
-                  autoFocus
-                  fullWidth
-                  id="registrantId"
-                  floatingLabelText="Registrant ID"
-                  hintText="Enter Registrant ID Here"
-                  value={store.registrantId}
-                  onChange={((...args) => this.handleChange('registrantId', ...args))}
-                  errorText={this.errorRegistrantId}
-                />
-                <br />
-                <TextField
-                  fullWidth
-                  id="pin"
-                  floatingLabelText="Pin"
-                  hintText="Enter PIN"
-                  type="tel"
-                  value={store.pin}
-                  onChange={((...args) => this.handleChange('pin', ...args))}
-                  errorText={this.errorPin}
-                />
-              </Box>
-              <Box col={12} p={1}>
-                <div
-                  className={cs.barcode}
-                />
-              </Box>
-            </CardMedia>
+            <CardText>
+              <TextField
+                autoFocus
+                fullWidth
+                id="registrantId"
+                floatingLabelText="Registrant ID"
+                hintText="Enter Registrant ID Here"
+                value={store.registrantId}
+                onChange={((...args) => this.handleChange('registrantId', ...args))}
+                errorText={this.errorRegistrantId}
+              />
+              <br />
+              <TextField
+                fullWidth
+                id="pin"
+                floatingLabelText="Pin"
+                hintText="Enter PIN"
+                type="tel"
+                value={store.pin}
+                onChange={((...args) => this.handleChange('pin', ...args))}
+                errorText={this.errorPin}
+              />
+
+              <div
+                className={cs.barcode}
+              />
+            </CardText>
             <CardActions>
               <RaisedButton
                 primary
@@ -139,7 +136,7 @@ export default class Login extends Component {
         </Box>
         <Box col={12} lg={6} md={12} sm={12} p={1}>
           <Card>
-            <CardMedia>
+            <CardText>
               <Box col={12} p={1}>
                 <RaisedButton
                   label="Browse Eligible Sites"
@@ -147,7 +144,7 @@ export default class Login extends Component {
                   onTouchTap={((...args) => this.browse(...args))}
                 />
               </Box>
-            </CardMedia>
+            </CardText>
           </Card>
         </Box>
       </Flex>

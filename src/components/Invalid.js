@@ -13,6 +13,7 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import {List, ListItem} from 'material-ui/List'
 import Typography from './Typography'
+import cs from '../styles/pages/_home.scss'
 
 const styles = {
   showAll: {
@@ -67,12 +68,12 @@ export default class Invalid extends Component {
     const { store } = this.props
     const { muiTheme } = this.context
     return (
-      <Box col={12} p={1}>
+      <Box col={12} p={1} className={cs.mainContainer}>
         <Card>
           <CardHeader
             title={"Voting is not available"}
           />
-          <CardMedia>
+          <CardText>
             <Box col={12} p={1}>
               <Typography type={"headline"}>
                 {store.alreadyVoted &&
@@ -86,7 +87,7 @@ export default class Invalid extends Component {
                 }
               </Typography>
               </Box>
-          </CardMedia>
+          </CardText>
         </Card>
       </Box>
     )

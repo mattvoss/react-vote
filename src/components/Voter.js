@@ -88,59 +88,52 @@ export default class Voter extends Component {
   render() {
     const { store } = this.props
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardHeader
-              title="Voter Identification"
-              subtitle="Enter your Registrant ID and Pin to vote"
+      <Box col={12} p={1} className={cs.mainContainer}>
+        <Card>
+          <CardHeader
+            title="Voter Identification"
+            subtitle="Enter your Registrant ID and Pin to vote"
+          />
+          <CardText>
+            <TextField
+              autoFocus
+              fullWidth
+              id="registrantId"
+              floatingLabelText="Registrant ID"
+              hintText="Enter Registrant ID Here"
+              value={store.registrantId}
+              onChange={((...args) => this.handleChange('registrantId', ...args))}
+              errorText={this.errorRegistrantId}
             />
-            <CardMedia>
-              <Row>
-                <Column md={12}>
-                  <TextField
-                    autoFocus
-                    fullWidth
-                    id="registrantId"
-                    floatingLabelText="Registrant ID"
-                    hintText="Enter Registrant ID Here"
-                    value={store.registrantId}
-                    onChange={((...args) => this.handleChange('registrantId', ...args))}
-                    errorText={this.errorRegistrantId}
-                  />
-                  <br />
-                  <TextField
-                    fullWidth
-                    id="pin"
-                    floatingLabelText="Pin"
-                    hintText="Enter PIN"
-                    value={store.pin}
-                    onChange={((...args) => this.handleChange('pin', ...args))}
-                    errorText={this.errorPin}
-                  />
-                </Column>
-                <Column md={12}>
-                  <div
-                    className={cs.barcode}
-                  />
-                </Column>
-              </Row>
-            </CardMedia>
-            <CardActions>
-              <RaisedButton
-                label="Previous" 
-                onTouchTap={((...args) => this.goPrevious(...args))}
-              />
-              <RaisedButton
-                primary
-                disabled={!this.checkIfComplete()}
-                label="Next"
-                onTouchTap={((...args) => this.verifyRegistrant(...args))}
-              />
-            </CardActions>
-          </Card>
-        </Column>
-      </Row>
+            <br />
+            <TextField
+              fullWidth
+              id="pin"
+              floatingLabelText="Pin"
+              hintText="Enter PIN"
+              value={store.pin}
+              onChange={((...args) => this.handleChange('pin', ...args))}
+              errorText={this.errorPin}
+            />
+
+            <div
+              className={cs.barcode}
+            />
+          </CardText>
+          <CardActions>
+            <RaisedButton
+              label="Previous" 
+              onTouchTap={((...args) => this.goPrevious(...args))}
+            />
+            <RaisedButton
+              primary
+              disabled={!this.checkIfComplete()}
+              label="Next"
+              onTouchTap={((...args) => this.verifyRegistrant(...args))}
+            />
+          </CardActions>
+        </Card>
+      </Box>
     )
   }
 

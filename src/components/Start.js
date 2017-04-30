@@ -63,7 +63,7 @@ export default class Faq extends Component {
     const { muiTheme } = this.context
 
     return (
-      <Box col={12} p={1}>
+      <Box col={12} p={1} className={cs.mainContainer}>
         {!store.isActive() && !store.isAfterStart()&&
           <Card>
             <CardText>

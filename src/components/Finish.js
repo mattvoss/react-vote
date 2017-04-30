@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Page, Row, Column } from 'hedron'
+import { Flex, Box } from 'reflexbox'
 import {
   Card,
   CardActions,
@@ -15,6 +15,7 @@ import {List, ListItem} from 'material-ui/List'
 import ActionDone from 'material-ui/svg-icons/action/done'
 import ReactCountdownClock from 'react-countdown-clock'
 import Typography from './Typography'
+import cs from '../styles/pages/_home.scss'
 
 @inject("store") @observer
 export default class Finish extends Component {
@@ -72,29 +73,25 @@ export default class Finish extends Component {
     const { muiTheme } = this.context
 
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardHeader
-              title="Vote Cast"
-              subtitle="Thank you for voting"
-            />
-            <CardMedia>
-              <Row alignItems="center">
-                <Column md={12} style={{height: '350px'}}>
-                  <ReactCountdownClock 
-                    seconds={25}
-                    color="#000"
-                    alpha={0.9}
-                    size={300}
-                    onComplete={this.goBegin} 
-                  />
-                </Column>
-              </Row>
-            </CardMedia>
-          </Card>
-        </Column>
-      </Row>
+      <Box col={12} p={1} className={cs.mainContainer}>
+        <Card>
+          <CardHeader
+            title="Vote Cast"
+            subtitle="Thank you for voting"
+          />
+          <CardText>
+            <div style={{height: '350px'}}>
+              <ReactCountdownClock 
+                seconds={25}
+                color="#000"
+                alpha={0.9}
+                size={300}
+                onComplete={this.goBegin} 
+              />
+            </div>
+          </CardText>
+        </Card>
+      </Box>
     )
   }
 

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Page, Row, Column } from 'hedron'
+import { Flex, Box } from 'reflexbox'
 import {
   Card,
   CardActions,
@@ -14,7 +14,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {List, ListItem} from 'material-ui/List'
 import ActionDone from 'material-ui/svg-icons/action/done';
 import Typography from './Typography'
-import { authorize } from './authorize.hoc';
+import { authorize } from './authorize.hoc'
+import cs from '../styles/pages/_home.scss'
+
 let offices = []
 const styles = {
   block: {
@@ -108,36 +110,30 @@ export default class Review extends Component {
     offices = store.offices
 
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardHeader
-              title="Review Vote(s)"
-              subtitle="Click/Tap vote to change"
+      <Box col={12} p={1} className={cs.mainContainer}>
+        <Card>
+          <CardHeader
+            title="Review Vote(s)"
+            subtitle="Click/Tap vote to change"
+          />
+          <CardText>
+            {store.votes.length > 0 &&
+              <RenderVotes votes={store.votes} onSelect={this.selectVote} />
+            }
+          </CardText>
+          <CardActions>
+            <RaisedButton
+              label="Previous" 
+              onTouchTap={((...args) => this.goPrevious(...args))}
             />
-            <CardMedia>
-              <Row>
-                <Column md={12}>
-                  {store.votes.length > 0 &&
-                      <RenderVotes votes={store.votes} onSelect={this.selectVote} />
-                  }
-                </Column>
-              </Row>
-            </CardMedia>
-            <CardActions>
-              <RaisedButton
-                label="Previous" 
-                onTouchTap={((...args) => this.goPrevious(...args))}
-              />
-              <RaisedButton
-                primary
-                label="Cast Vote(s)"
-                onTouchTap={((...args) => this.handleNext(...args))}
-              />
-            </CardActions>
-          </Card>
-        </Column>
-      </Row>
+            <RaisedButton
+              primary
+              label="Cast Vote(s)"
+              onTouchTap={((...args) => this.handleNext(...args))}
+            />
+          </CardActions>
+        </Card>
+      </Box>
     )
   }
 

@@ -13,6 +13,13 @@ import ReactCountdownClock from 'react-countdown-clock'
 import TopBar from './TopBar'
 import Type from './Type'
 
+const styles = {
+  container: {
+    flex: 1,
+    flexGrow: 1,
+    display: 'flex',
+  }
+}
 const history = createBrowserHistory()
 
 @observer
@@ -95,7 +102,7 @@ export default class App extends Component {
         idleAction={this.onIdle}
         timeout={store.timeout}
         format="MM-DD-YYYY HH:MM:ss.SSS">
-        <div>
+        <div style={styles.container}>
           <Router
             history={history}
             ref={(router) => { this.router = router }}
@@ -103,6 +110,7 @@ export default class App extends Component {
             <Provider store={store}>
               <Flex
                 column
+                style={{flexGrow: 1}}
               >
                 {/*<DevTools />*/}
                 <TopBar />

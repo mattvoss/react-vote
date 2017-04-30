@@ -16,6 +16,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import Typography from './Typography'
 import { authorize } from './authorize.hoc'
+import cs from '../styles/pages/_home.scss'
 
 const styles = {
   block: {
@@ -135,13 +136,13 @@ export default class Type extends Component {
     const { store } = this.props
     const { muiTheme } = this.context
     return (
-      <Box col={12} p={1}>
+      <Box col={12} p={1} className={cs.mainContainer}>
         <Card>
           <CardHeader
             title="Voter Type"
             subtitle="Select your voter type"
           />
-          <CardMedia>
+          <CardText>
             
             <Box col={12} p={1}>
               <RadioButtonGroup
@@ -162,7 +163,7 @@ export default class Type extends Component {
                 />
               </RadioButtonGroup>
             </Box>
-          </CardMedia>
+          </CardText>
           <CardActions>
             <RaisedButton
               label="Previous" 

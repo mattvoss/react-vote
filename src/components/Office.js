@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Page, Row, Column } from 'hedron'
+import { Flex, Box } from 'reflexbox'
 import {
   Card,
   CardActions,
@@ -11,10 +11,12 @@ import {
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import {List, ListItem} from 'material-ui/List'
 import Typography from './Typography'
-import { authorize } from './authorize.hoc';
+import { authorize } from './authorize.hoc'
+import cs from '../styles/pages/_home.scss'
+
 let candidateSelected = null
 const styles = {
   block: {
@@ -116,49 +118,43 @@ export default class Office extends Component {
     }
     
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardHeader
-              title={office.title}
-              subtitle="Select the candidate you wish to vote for"
-            />
-            <CardMedia>
-              <Row>
-                <Column md={12}>
-                  {office.Candidates.length > 0 &&
-                      <RenderCandidates candidates={office.Candidates} onChange={this.selectCandidate} />
-                  }
-                </Column>
-              </Row>
-            </CardMedia>
-            <CardActions>
-              {store.edit &&
+      <Box col={12} p={1} className={cs.mainContainer}>
+        <Card>
+          <CardHeader
+            title={office.title}
+            subtitle="Select the candidate you wish to vote for"
+          />
+          <CardText>
+            {office.Candidates.length > 0 &&
+              <RenderCandidates candidates={office.Candidates} onChange={this.selectCandidate} />
+            }
+          </CardText>
+          <CardActions>
+            {store.edit &&
+              <RaisedButton
+                primary
+                disabled={!vote}
+                label="Update Vote"
+                onTouchTap={((...args) => this.navigate('/review', ...args))}
+              />
+            }
+            {!store.edit &&
+              <div>
+                <RaisedButton
+                  label="Previous" 
+                  onTouchTap={((...args) => this.goPrevious(...args))}
+                />
                 <RaisedButton
                   primary
                   disabled={!vote}
-                  label="Update Vote"
-                  onTouchTap={((...args) => this.navigate('/review', ...args))}
+                  label="Next"
+                  onTouchTap={((...args) => this.handleNext(...args))}
                 />
-              }
-              {!store.edit &&
-                <div>
-                  <RaisedButton
-                    label="Previous" 
-                    onTouchTap={((...args) => this.goPrevious(...args))}
-                  />
-                  <RaisedButton
-                    primary
-                    disabled={!vote}
-                    label="Next"
-                    onTouchTap={((...args) => this.handleNext(...args))}
-                  />
-                </div>
-              }
-            </CardActions>
-          </Card>
-        </Column>
-      </Row>
+              </div>
+            }
+          </CardActions>
+        </Card>
+      </Box>
     )
   }
 

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { observable } from 'mobx'
 import { inject, observer } from 'mobx-react'
-import { Page, Row, Column } from 'hedron'
+import { Flex, Box } from 'reflexbox'
 import {
   Card,
   CardActions,
@@ -14,6 +14,7 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Typography from './Typography'
 import { authorize } from './authorize.hoc'
+import cs from '../styles/pages/_home.scss'
 
 @inject("store") @authorize @observer
 export default class Site extends Component {
@@ -81,50 +82,44 @@ export default class Site extends Component {
     const { store } = this.props
     const { muiTheme } = this.context
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardMedia>
-              <Row>
-                <Column md={12}>
-                  <TextField
-                    autoFocus
-                    fullWidth
-                    id="siteId"
-                    floatingLabelText="Member Number (6 or 8 digits)"
-                    hintText="Enter Membership Number"
-                    type="tel"
-                    value={store.siteId}
-                    onChange={((...args) => this.handleChange('siteId', ...args))}
-                    errorText={this.error}
-                  />
-                  {store.site &&
-                    <div>
-                      <Typography type='title'>Selected Site</Typography>
-                      <Typography type='body1'>{store.site.company}</Typography>
-                      <Typography type='body1'>{store.site.street1}</Typography>
-                      <Typography type='body1'>{store.site.street2}</Typography>
-                      <Typography type='body1'>{store.site.city}, {store.site.state}</Typography>
-                    </div>
-                  }
-                </Column>
-              </Row>
-            </CardMedia>
-            <CardActions>
-              <RaisedButton
-                label="Previous" 
-                onTouchTap={((...args) => this.goPrevious(...args))}
-              />
-              <RaisedButton
-                primary
-                disabled={!store.site}
-                label="Next"
-                onTouchTap={((...args) => this.handleNavigate('type', ...args))}
-              />
-            </CardActions>
-          </Card>
-        </Column>
-      </Row>
+      <Box col={12} p={1} className={cs.mainContainer}>
+        <Card>
+          <CardText>
+            <TextField
+              autoFocus
+              fullWidth
+              id="siteId"
+              floatingLabelText="Member Number (6 or 8 digits)"
+              hintText="Enter Membership Number"
+              type="tel"
+              value={store.siteId}
+              onChange={((...args) => this.handleChange('siteId', ...args))}
+              errorText={this.error}
+            />
+            {store.site &&
+              <div>
+                <Typography type='title'>Selected Site</Typography>
+                <Typography type='body1'>{store.site.company}</Typography>
+                <Typography type='body1'>{store.site.street1}</Typography>
+                <Typography type='body1'>{store.site.street2}</Typography>
+                <Typography type='body1'>{store.site.city}, {store.site.state}</Typography>
+              </div>
+            }
+          </CardText>
+          <CardActions>
+            <RaisedButton
+              label="Previous" 
+              onTouchTap={((...args) => this.goPrevious(...args))}
+            />
+            <RaisedButton
+              primary
+              disabled={!store.site}
+              label="Next"
+              onTouchTap={((...args) => this.handleNavigate('type', ...args))}
+            />
+          </CardActions>
+        </Card>
+      </Box>
     )
   }
 

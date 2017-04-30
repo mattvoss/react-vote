@@ -13,6 +13,7 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import {List, ListItem} from 'material-ui/List'
 import Typography from './Typography'
+import cs from '../styles/pages/_home.scss'
 
 const styles = {
   showAll: {
@@ -70,13 +71,13 @@ export default class States extends Component {
     const { store } = this.props
     const { muiTheme } = this.context
     return (
-      <Box col={12} p={1}>
+      <Box col={12} p={1} className={cs.mainContainer}>
         <Card>
           <CardHeader
             title="Eligible States"
             subtitle="Select your work site state from the list below"
           />
-          <CardMedia>
+          <CardText>
             <Box col={12} p={1}>
               <List>
                 <ListItem
@@ -101,7 +102,7 @@ export default class States extends Component {
                 />
               </List>
             </Box>
-          </CardMedia>
+          </CardText>
         </Card>
       </Box>
     )

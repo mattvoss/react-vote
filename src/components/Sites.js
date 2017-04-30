@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Page, Row, Column } from 'hedron'
+import { Flex, Box } from 'reflexbox'
 import {
   Card,
   CardActions,
@@ -14,12 +14,15 @@ import RaisedButton from 'material-ui/RaisedButton'
 import ActionCached from 'material-ui/svg-icons/action/cached'
 import {List, ListItem} from 'material-ui/List'
 import Typography from './Typography'
-import { authorize } from './authorize.hoc';
+import { authorize } from './authorize.hoc'
+import cs from '../styles/pages/_home.scss'
+
 const styles = {
   showAll: {
     marginLeft: '10px'
   }
 } 
+
 const RenderSite = (site, onSelect) => (
   <ListItem
     disabled
@@ -113,58 +116,48 @@ export default class Sites extends Component {
     const { store } = this.props
     const { muiTheme } = this.context
     return (
-      <Row>
-        <Column md={12}>
-          <Card>
-            <CardHeader
-              title="Browse Eligible Sites"
-              subtitle="Only Region 6 Full Member Sites are eligible"
-            />
-            <CardMedia>
-              <Row>
-                <Column md={12}>
-                  <TextField
-                    autoFocus
-                    id="name"
-                    hintText="Enter site to search..."
-                    value={store.search}
-                    onChange={((...args) => this.handleChange('search', ...args))}
-                  /> <br />
-                  <RaisedButton
-                    icon={<ActionCached />}
-                    label="Show All"
-                    onTouchTap={((...args) => this.showAll(...args))}
-                  />
-                  {store.isActive() &&
-                  <RaisedButton
-                    label="Start Vote"
-                    style={styles.showAll} 
-                    primary
-                    onTouchTap={((...args) => this.handleNavigate('/login', ...args))}
-                  />
-                  }
-                </Column>
-              </Row>
-              <Row>
-                <Column md={12}>
-                  {store.companies.length > 0 &&
-                      <RenderSites sites={store.companies} onSelect={((...args) => this.selectSite(...args))} />
-                  }
-                </Column>
-              </Row>
-            </CardMedia>
-            {store.isActive() &&
-              <CardActions>
-                <RaisedButton
-                  primary
-                  label="Start Vote"
-                  onTouchTap={((...args) => this.handleNavigate('/login', ...args))}
-                />
-              </CardActions>
-            }
-          </Card>
-        </Column>
-      </Row>
+      <Box col={12} p={1} className={cs.mainContainer}>
+        <Card>
+          <CardHeader
+            title="Browse Eligible Sites"
+            subtitle="Only Region 6 Full Member Sites are eligible"
+          />
+          <CardText>
+              <TextField
+                autoFocus
+                id="name"
+                hintText="Enter site to search..."
+                value={store.search}
+                onChange={((...args) => this.handleChange('search', ...args))}
+              /> <br />
+              <RaisedButton
+                icon={<ActionCached />}
+                label="Show All"
+                onTouchTap={((...args) => this.showAll(...args))}
+              />
+              {store.isActive() &&
+              <RaisedButton
+                label="Start Vote"
+                style={styles.showAll} 
+                primary
+                onTouchTap={((...args) => this.handleNavigate('/login', ...args))}
+              />
+              }
+              {store.companies.length > 0 &&
+                  <RenderSites sites={store.companies} onSelect={((...args) => this.selectSite(...args))} />
+              }
+          </CardText>
+          {store.isActive() &&
+            <CardActions>
+              <RaisedButton
+                primary
+                label="Start Vote"
+                onTouchTap={((...args) => this.handleNavigate('/login', ...args))}
+              />
+            </CardActions>
+          }
+        </Card>
+      </Box>
     )
   }
 
