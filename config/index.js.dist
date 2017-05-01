@@ -3,4 +3,6 @@ module.exports = {
   checkinServerUrl: 'https://checkin.regionvivpp.org',
   start: '2017-04-28 09:00:00',
   end: '2017-04-29 07:00:00',
+  finishTimeout: 15000,
+  timeout: 1050000,
 };

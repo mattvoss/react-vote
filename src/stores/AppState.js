@@ -23,12 +23,15 @@ class AppState {
   @observable type = null
   @observable edit = false
   @observable timeout = 60000
+  @observable finishTimeout = 30000
   @observable excludePage = false
   @observable currentPath = "General"
   @observable inFaq = false
 
   constructor() {
     this.fetchOffices()
+    this.timeout = settings.timeout || this.timeout
+    this.finishTimeout = settings.finishTimeout || this.finishTimeout
   }
 
   @action async fetchOffices() {
