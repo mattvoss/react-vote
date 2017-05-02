@@ -83,40 +83,30 @@ export default class Faq extends Component {
             </Typography>
             <Typography type={"body1"}>
               <ul>
-                <li>You will need your Badge which contains your Registrant ID and 4 digit pin.</li>
+                <li>You will need your Badge which contains your Registrant ID and 4 digit pin. <a href="#example">See example below.</a></li>
                 <li>You will need your 6 or 8 digit VPPPA Member number. If you do not know your number you can contact your site representative or visit the Registration Desk starting at 7:30 a.m. Wednesday May 3rd.</li>
                 <li>Only one management and one non-management vote will be recorded for each VPPPA association full member site.</li>
-                <li>Coordinate with your co-workers to assign voting representatives.</li>
                 <li>Voting will also be available onsite Wednesday May 3rd 7:30 - 10:30 a.m. in the Governor's Hall</li>
                 <li><a target="_blank" href="http://www.vpppa.org/membership/membership-member-center">More information about VPPPA Membership types</a></li>
               </ul>
             </Typography>
             <br />
+            <RaisedButton
+              primary
+              label="Start Vote" 
+              onTouchTap={((...args) => this.goNext(...args))}
+            />
+            <br />
+            <br />
             <Divider />
             <br />
             <Typography type={"headline"}>
-              Example Badge
+              <a name="example">Example Badge</a>
             </Typography>
             <div
               className={cs.barcode}
             />
           </CardText>
-          <CardActions>
-            {!store.isActive() && !store.isAfterStart() &&
-              <RaisedButton
-                primary
-                label="Browse Eligible Sites" 
-                onTouchTap={((...args) => this.browse(...args))}
-              />
-            }
-            {store.isActive() &&
-              <RaisedButton
-                primary
-                label="Next" 
-                onTouchTap={((...args) => this.goNext(...args))}
-              />
-            }
-          </CardActions>
         </Card>
       </Box>
     )
