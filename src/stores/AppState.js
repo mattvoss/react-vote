@@ -218,7 +218,6 @@ class AppState {
   @action reset() {
     this.voter = null
     this.companies = []
-    this.offices = []
     this.votes = []
     this.registrantId = ""
     this.pin = ""
