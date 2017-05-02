@@ -15,9 +15,7 @@ import Type from './Type'
 
 const styles = {
   container: {
-    flex: 1,
-    flexGrow: 1,
-    display: 'flex',
+    height: '100%'
   }
 }
 const history = createBrowserHistory()
@@ -110,7 +108,7 @@ export default class App extends Component {
             <Provider store={store}>
               <Flex
                 column
-                style={{flexGrow: 1}}
+                style={{height: '100%', minHeight: 0}}
               >
                 {/*<DevTools />*/}
                 <TopBar />
