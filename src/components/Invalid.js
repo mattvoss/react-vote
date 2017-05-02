@@ -91,7 +91,7 @@ export default class Invalid extends Component {
           <CardActions>
             <RaisedButton
               label="Start Over" 
-              onTouchTap={((...args) => this.navigate('/'))}
+              onTouchTap={((...args) => this.navigate('/reset'))}
             />
           </CardActions>
         </Card>
