@@ -37,7 +37,7 @@ export default class Invalid extends Component {
     const { store } = this.props
     store.setExcludePage(true)
 
-    setTimeout(() => this.navigate('/'), 15000)
+    setTimeout(() => this.navigate('/reset'), 15000)
   }
 
   componentWillUnmount() {
