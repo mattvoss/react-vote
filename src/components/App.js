@@ -64,7 +64,7 @@ export default class App extends Component {
     const { store } = this.props
     this.dialogOpen = false
     store.reset()
-    this.navigate('/')
+    this.navigate('/reset')
   }
 
   navigate = (path) => {
