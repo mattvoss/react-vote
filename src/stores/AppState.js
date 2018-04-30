@@ -27,15 +27,23 @@ class AppState {
   @observable excludePage = false
   @observable currentPath = "General"
   @observable inFaq = false
+  request;
 
   constructor() {
-    this.fetchOffices()
     this.timeout = settings.timeout || this.timeout
     this.finishTimeout = settings.finishTimeout || this.finishTimeout
+
+    const token = (settings.token) ? settings.token : '';
+    this.request = axios.create({
+      url,
+      timeout: 45000,
+      headers: {"Authorization" : `Bearer ${token}`}
+    })
+    this.fetchOffices()
   }
 
   @action async fetchOffices() {
-    let {data} = await axios.get(`${url}/api/offices`)
+    let {data} = await this.request.get(`${url}/api/offices`)
     if (data.length > 0) {
       this.offices = data
     }
@@ -44,7 +52,7 @@ class AppState {
   @action async getRegistrant() {
     let retVal
     try {
-      let { data } = await axios.get(`${url}/api/voter/${this.registrantId}`)
+      let { data } = await this.request.get(`${url}/api/voter/${this.registrantId}`)
       if (data) {
         this.voter = data
       }
@@ -60,7 +68,7 @@ class AppState {
   @action async getRegistrantPin() {
     let retVal
     try {
-      let {data} = await axios.get(`${url}/api/voter/${this.registrantId}/pin/${this.pin}`)
+      let {data} = await this.request.get(`${url}/api/voter/${this.registrantId}/pin/${this.pin}`)
       
       if ("id" in data) {
         this.pinConfirmed = true
@@ -94,7 +102,7 @@ class AppState {
 
   @action async getAllSites() {
     this.search = ""
-    let {data} = await axios.get(`${url}/api/votingSites`)
+    let {data} = await this.request.get(`${url}/api/votingSites`)
     console.log(data)
     this.companies = data
     return data
@@ -102,7 +110,7 @@ class AppState {
 
   @action async searchCompanies(search) {
     const query = (search) ? search : this.search
-    let {data} = await axios.get(`${url}/api/votingSite/${query}`)
+    let {data} = await this.request.get(`${url}/api/votingSite/${query}`)
     console.log(data)
     this.companies = data
     return data
@@ -110,14 +118,14 @@ class AppState {
 
   @action async searchSiteIds(search) {
     const query = (search) ? search : this.siteId
-    let {data} = await axios.get(`${url}/api/siteid/?search=${query}`)
+    let {data} = await this.request.get(`${url}/api/siteid/?search=${query}`)
     console.log(data)
     this.companies = data
     return data
   }
 
   @action async getSite() {
-    let {data} = await axios.get(`${url}/api/site/${this.siteId}`)
+    let {data} = await this.request.get(`${url}/api/site/${this.siteId}`)
     console.log(data)
     if (data && data.id > 0) {
       this.site = data
@@ -128,7 +136,7 @@ class AppState {
   }
 
   @action async selectSite(siteId) {
-    let {data} = await axios.get(`${url}/api/site/${siteId}`)
+    let {data} = await this.request.get(`${url}/api/site/${siteId}`)
     console.log(data)
     if (data && data.id > 0) {
       this.siteId = siteId
@@ -166,7 +174,7 @@ class AppState {
   @action updateVote(office, candidate) {
     let vote = {}
     const idx = this.votes.findIndex(vote => vote.electionid == office.id)
-    const prefix = this.voter.badge_prefix
+    const prefix = this.voter.badgePrefix
     const regId = `${prefix}${this.voter.id.toString().padStart(5, '0')}`
     if (idx > -1) {
       vote = this.votes[idx]
@@ -197,9 +205,12 @@ class AppState {
   }
 
   @action async castVote() {
-    let {data} = await axios.post(
+    const prefix = this.voter.badgePrefix
+    const registrantId = `${prefix}${this.voter.id.toString().padStart(5, '0')}`
+    let {data} = await this.request.post(
       `${url}/api/castVote`,
       {
+        registrantId,
         votes: this.votes
       }
     )
