@@ -34,8 +34,8 @@ const getOffice = (officeId) => {
 
 const getOfficeCandidate = (officeId, candidateId) => {
   const office = getOffice(officeId)
-  const idx = office.Candidates.findIndex(c => c.id == candidateId)
-  return office.Candidates[idx]
+  const idx = office.candidates.findIndex(c => c.id == candidateId)
+  return office.candidates[idx]
 }
 
 const RenderVote = (vote, onSelect) => (

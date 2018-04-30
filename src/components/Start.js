@@ -68,7 +68,7 @@ export default class Faq extends Component {
           <Card>
             <CardText>
               <Typography type={"headline"}>
-                Voting will begin online Tue May 2nd at 5 p.m - Wed. May 3rd 10:30 a.m.
+                Voting will begin online Tue May 1st at 5 p.m - Wed. May 2nd 10:30 a.m.
               </Typography>
               <p>
                 See below for instructions and eligibility.
@@ -83,17 +83,16 @@ export default class Faq extends Component {
             </Typography>
             <Typography type={"body1"}>
               <ul>
-                <li>You will need your Badge which contains your Registrant ID and 4 digit pin. <a href="#example">See example below.</a></li>
-                <li>You will need your 6 or 8 digit VPPPA Member number. If you do not know your number you can contact your site representative or visit the Registration Desk starting at 7:30 a.m. Wednesday May 3rd.</li>
-                <li>Only one management and one non-management vote will be recorded for each VPPPA association full member site.</li>
-                <li>Voting will also be available onsite Wednesday May 3rd 7:30 - 10:30 a.m. in the Governor's Hall</li>
+                <li>You will need your 6 or 8 digit VPPPA Member number. If you do not know your number you can contact your site representative or visit the Registration Desk starting at 7:30 a.m. Wednesday May 2nd.</li>
+                <li>Only one management and one non-management vote will be recorded for each VPPPA association full member site. <span style={{ fontWeight: 'bold' }}>Coordinate with other personnel from your site.</span></li>
+                <li>Voting will also be available onsite Wednesday May 2nd 7:30 - 10:30 a.m. in the Exhibitor Hall</li>
                 <li><a target="_blank" href="http://www.vpppa.org/membership/membership-member-center">More information about VPPPA Membership types</a></li>
               </ul>
             </Typography>
             <br />
             <RaisedButton
               primary
-              label="Start Vote" 
+              label="Next" 
               onTouchTap={((...args) => this.goNext(...args))}
             />
             <br />

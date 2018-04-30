@@ -113,8 +113,8 @@ export default class Office extends Component {
     const office = store.offices[electionIdx]
     const vote = store.getVote(office.id)
     if (vote) {
-      const idx = office.Candidates.findIndex(c => c.id == vote.candidateid)
-      candidateSelected = office.Candidates[idx]
+      const idx = office.candidates.findIndex(c => c.id == vote.candidateid)
+      candidateSelected = office.candidates[idx]
     }
     
     return (
@@ -125,8 +125,8 @@ export default class Office extends Component {
             subtitle="Select the candidate you wish to vote for"
           />
           <CardText>
-            {office.Candidates.length > 0 &&
-              <RenderCandidates candidates={office.Candidates} onChange={this.selectCandidate} />
+            {office.candidates.length > 0 &&
+              <RenderCandidates candidates={office.candidates} onChange={this.selectCandidate} />
             }
           </CardText>
           <CardActions>

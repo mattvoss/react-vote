@@ -75,7 +75,7 @@ export default class States extends Component {
         <Card>
           <CardHeader
             title="Eligible States"
-            subtitle="Select your work site state from the list below"
+            subtitle="Select your VPPPA member work site state from the list below"
           />
           <CardText>
             <Box col={12} p={1}>

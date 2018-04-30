@@ -90,10 +90,10 @@ export default class Faq extends Component {
                 <Typography type={"body1"}>
                   <ul>
                     <li>You will need your Badge which contains your Registrant ID and 4 digit pin.</li>
-                    <li>You will need your 6 or 8 digit VPPPA Member number. If you do not know your number you can contact your site representative or visit the Registration Desk starting at 7:30 a.m. Wednesday May 3rd.</li>
+                    <li>You will need your 6 or 8 digit VPPPA Member number. If you do not know your number you can contact your site representative or visit the Registration Desk starting at 7:30 a.m. Wednesday May 2nd.</li>
                     <li>Only one management and one non-management vote will be recorded for each VPPPA association full member site.</li>
                     <li>Coordinate with your co-workers to assign voting representatives.</li>
-                    <li>Voting will also be available onsite Wednesday May 3rd 7:30 - 10:30 a.m. in the Governor's Hall</li>
+                    <li>Voting will also be available onsite Wednesday May 2nd 7:30 - 10:30 a.m. in the Exhibit Hall</li>
                     <li><a target="_blank" href="http://www.vpppa.org/membership/membership-member-center">More information about VPPPA Membership types</a></li>
                   </ul>
                 </Typography>
@@ -193,7 +193,7 @@ export default class Faq extends Component {
                   Membership clarification
                 </Typography>
                 <p>
-                  If your work site is not currently in this list you can clarify if you are part of the association with Full Member status in the Region VI area by coming to the registration area starting at 7:30 a.m. Wednesday May 3rd.
+                  If your work site is not currently in this list you can clarify if you are part of the association with Full Member status in the Region VI area by coming to the registration area starting at 7:30 a.m. Wednesday May 2nd.
                 </p>
                 <br />
                 <Divider />
